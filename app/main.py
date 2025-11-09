@@ -166,7 +166,8 @@ async def copilotkit_endpoint(request: Request) -> JSONResponse:
         
     except Exception as e:
         logger.error(f"Error in copilotkit endpoint: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
+        error_detail = str(e) if settings.ENVIRONMENT == "development" else "Internal server error"
+        raise HTTPException(status_code=500, detail=error_detail)
 
 
 @app.post("/api/copilotkit/stream")
@@ -199,7 +200,8 @@ async def copilotkit_stream_endpoint(request: Request) -> StreamingResponse:
         
     except Exception as e:
         logger.error(f"Error in stream endpoint: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
+        error_detail = str(e) if settings.ENVIRONMENT == "development" else "Internal server error"
+        raise HTTPException(status_code=500, detail=error_detail)
 
 
 @app.post("/api/action/{action_name}")
@@ -227,7 +229,8 @@ async def execute_action(action_name: str, request: Request) -> Dict[str, Any]:
         
     except Exception as e:
         logger.error(f"Error executing action {action_name}: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
+        error_detail = str(e) if settings.ENVIRONMENT == "development" else "Internal server error"
+        raise HTTPException(status_code=500, detail=error_detail)
 
 
 @app.exception_handler(Exception)
