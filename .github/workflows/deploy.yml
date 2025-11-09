@@ -58,7 +58,8 @@ jobs:
             --timeout=300 \
             --concurrency=80 \
             --min-instances=0 \
-            --max-instances=10
+            --max-instances=10 \
+                  --no-cpu-throttling
 
       - name: Get Service URL
         run: |
