@@ -1,0 +1,60 @@
+# Google Cloud Build configuration
+# Alternative to GitHub Actions for CI/CD
+
+steps:
+  # Build the container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'us-central1-docker.pkg.dev/$PROJECT_ID/ag2-repo/ag2-backend:$COMMIT_SHA'
+      - '-t'
+      - 'us-central1-docker.pkg.dev/$PROJECT_ID/ag2-repo/ag2-backend:latest'
+      - '.'
+    id: 'build-image'
+
+  # Push the container image to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'us-central1-docker.pkg.dev/$PROJECT_ID/ag2-repo/ag2-backend:$COMMIT_SHA'
+    id: 'push-image-sha'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'us-central1-docker.pkg.dev/$PROJECT_ID/ag2-repo/ag2-backend:latest'
+    id: 'push-image-latest'
+
+  # Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'ag2-backend'
+      - '--image=us-central1-docker.pkg.dev/$PROJECT_ID/ag2-repo/ag2-backend:$COMMIT_SHA'
+      - '--region=us-central1'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
+      - '--set-env-vars=GEMINI_API_KEY=${_GEMINI_API_KEY},DEEPSEEK_API_KEY=${_DEEPSEEK_API_KEY},FRONTEND_URL=https://ag2-predictive-state-editor.vercel.app,ENVIRONMENT=production'
+      - '--memory=2Gi'
+      - '--cpu=2'
+      - '--timeout=300'
+      - '--concurrency=80'
+      - '--min-instances=0'
+      - '--max-instances=10'
+    id: 'deploy-cloud-run'
+
+# Configuration
+options:
+  logging: CLOUD_LOGGING_ONLY
+  machineType: 'N1_HIGHCPU_8'
+
+# Timeout
+timeout: '1200s'
+
+# Substitutions (define these in Cloud Build trigger)
+substitutions:
+  _GEMINI_API_KEY: ''
+  _DEEPSEEK_API_KEY: ''
