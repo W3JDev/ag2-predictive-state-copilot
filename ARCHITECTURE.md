@@ -393,7 +393,7 @@
 
 ### AI/ML
 - **PyAutoGen** 0.2.18: Multi-agent orchestration
-- **Google Generative AI** 0.3.2: Gemini integration
+- **Google Generative AI** 0.3.0+: Gemini integration
 - **DeepSeek API**: Fallback LLM (OpenAI-compatible)
 
 ### Infrastructure
