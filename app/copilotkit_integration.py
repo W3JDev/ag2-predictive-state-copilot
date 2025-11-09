@@ -1,7 +1,7 @@
 """CopilotKit integration handler for real-time streaming and protocol support."""
 
 import logging
-from typing import Dict, Any, Optional, AsyncIterator
+from typing import Dict, Any, AsyncIterator
 import json
 from .agents.document_agent import DocumentEditAgent
 
