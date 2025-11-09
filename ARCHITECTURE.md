@@ -389,7 +389,7 @@
 ### Core Framework
 - **FastAPI** 0.109.0: Modern async web framework
 - **Uvicorn** 0.27.0: ASGI server with WebSocket support
-- **Pydantic** 2.5.3: Data validation and settings
+- **Pydantic** 2.5.0+: Data validation and settings
 
 ### AI/ML
 - **PyAutoGen** 0.2.18: Multi-agent orchestration
