@@ -48,10 +48,8 @@ app = FastAPI(
 allowed_origins = [
     settings.FRONTEND_URL,
     "http://localhost:3000",
-    "http://localhost:3001",
-    "https://ag2-predictive-state-editor.vercel.app"
+    "http://localhost:3001"
 ]
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,
